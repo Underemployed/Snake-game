@@ -75,7 +75,7 @@ class Snake:
 class Game:
     def __init__(self):
         pygame.init()
-        pygame.display.set_caption("Codebasics Snake And Apple Game")
+        pygame.display.set_caption("Projectaro Team 1 Snake Game")
 
         pygame.mixer.init()
         self.play_background_music()
@@ -96,7 +96,9 @@ class Game:
         elif sound_name == 'ding':
             sound = pygame.mixer.Sound("resources/ding.mp3")
 
-        pygame.mixer.Sound.play(sound)
+        pygame.mixer.Sound.play(sound)git config" with "git config --global" to set a default
+hint: preference for all repositories. You can also pass --rebase, --no-rebase,
+hint: or --ff-only on the command line to override the configured 
 
     def reset(self):
         self.snake = Snake(self.surface)
