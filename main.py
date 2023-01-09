@@ -10,10 +10,21 @@ class Apple:
     def __init__(self, parent_screen):
         self.parent_screen = parent_screen
         self.image = pygame.image.load("resources/apple.jpg").convert()
+
         self.x = 120
         self.y = 120
+    
+    def draw_apple(self):
+        
+        screen_width, screen_height = self.parent_screen.get_size()
 
+        if self.x < 0 or self.x >= screen_width or self.y < 0 or self.y >= screen_height:
+            self.x, self.y = (random.randint(1, screen_width-1) , random.randint(1, screen_height-1)  )
+            
+        self.parent_screen.blit(self.image, (self.x, self.y))
+        pygame.display.flip()
     def draw(self):
+        
         self.parent_screen.blit(self.image, (self.x, self.y))
         pygame.display.flip()
 
@@ -45,9 +56,13 @@ class Snake:
 
     def walk(self):
         # update body
+        
         for i in range(self.length-1,0,-1):
+
+
             self.x[i] = self.x[i-1]
             self.y[i] = self.y[i-1]
+            
 
         # update head
         if self.direction == 'left':
@@ -58,6 +73,17 @@ class Snake:
             self.y[0] -= SIZE
         if self.direction == 'down':
             self.y[0] += SIZE
+        
+        screen_width, screen_height = self.parent_screen.get_size()
+        if self.x[0] < 0:
+            self.x[0] = screen_width - SIZE
+        elif self.x[0] >= screen_width:
+            self.x[0] = 0
+        if self.y[0] < 0:
+            self.y[0] = screen_height - SIZE
+        elif self.y[0] >= screen_height:
+            self.y[0] = 0
+        
 
         self.draw()
 
@@ -75,16 +101,16 @@ class Snake:
 class Game:
     def __init__(self):
         pygame.init()
-        pygame.display.set_caption("Projectaro Team 1 Snake Game")
+        pygame.display.set_caption("Snake And Apple Game")
 
         pygame.mixer.init()
         self.play_background_music()
 
-        self.surface = pygame.display.set_mode((1000, 800))
+        self.surface = pygame.display.set_mode((1280, 600))
         self.snake = Snake(self.surface)
         self.snake.draw()
         self.apple = Apple(self.surface)
-        self.apple.draw()
+        self.apple.draw_apple()
 
     def play_background_music(self):
         pygame.mixer.music.load('resources/bg_music_1.mp3')
@@ -96,9 +122,7 @@ class Game:
         elif sound_name == 'ding':
             sound = pygame.mixer.Sound("resources/ding.mp3")
 
-        pygame.mixer.Sound.play(sound)git config" with "git config --global" to set a default
-hint: preference for all repositories. You can also pass --rebase, --no-rebase,
-hint: or --ff-only on the command line to override the configured 
+        pygame.mixer.Sound.play(sound)
 
     def reset(self):
         self.snake = Snake(self.surface)
@@ -117,7 +141,7 @@ hint: or --ff-only on the command line to override the configured
     def play(self):
         self.render_background()
         self.snake.walk()
-        self.apple.draw()
+        self.apple.draw_apple()
         self.display_score()
         pygame.display.flip()
 
@@ -132,6 +156,8 @@ hint: or --ff-only on the command line to override the configured
             if self.is_collision(self.snake.x[0], self.snake.y[0], self.snake.x[i], self.snake.y[i]):
                 self.play_sound('crash')
                 raise "Collision Occurred"
+    
+
 
     def display_score(self):
         font = pygame.font.SysFont('arial',30)
@@ -154,6 +180,7 @@ hint: or --ff-only on the command line to override the configured
 
         while running:
             for event in pygame.event.get():
+          
                 if event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
                         running = False
@@ -174,7 +201,6 @@ hint: or --ff-only on the command line to override the configured
 
                         if event.key == K_DOWN:
                             self.snake.move_down()
-
                 elif event.type == QUIT:
                     running = False
             try:
